@@ -2,7 +2,8 @@
 #
 # EOF (end-of-file) token is used to indicate that
 # there is no more input left for lexical analysis
-INTEGER, PLUS, EOF = 'INTEGER', 'PLUS', 'EOF'
+import pdb 
+INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'EOF', 'MINUS'
 
 
 class Token(object):
@@ -45,6 +46,7 @@ class Interpreter(object):
         apart into tokens. One token at a time.
         """
         text = self.text
+        num = ''
 
         # is self.pos index past the end of the self.text ?
         # if so, then return EOF token because there is no more
@@ -60,13 +62,21 @@ class Interpreter(object):
         # integer, create an INTEGER token, increment self.pos
         # index to point to the next character after the digit,
         # and return the INTEGER token
-        if current_char.isdigit():
-            token = Token(INTEGER, int(current_char))
+        while current_char.isdigit():
+            pdb.set_trace()
+            num += current_char
             self.pos += 1
-            return token
+            current_char = text[self.pos]
+        token = Token(INTEGER, int(num))
+        return token
 
         if current_char == '+':
             token = Token(PLUS, current_char)
+            self.pos += 1
+            return token
+
+        if current_char == '-':
+            token = Token(MINUS, current_char)
             self.pos += 1
             return token
 
